@@ -1,34 +1,52 @@
 namespace HierarchyAccounts.Console.Display;
 
 using HierarchyAccounts.Application.DTOs;
+using System;
 
 /// <summary>
 /// Renders an AccountTreeDto as a readable ASCII tree in the terminal.
 /// </summary>
-/// <example>
-/// Global Corp (depth: 1) [id: xxxxxxxx-...]
-/// ├── Europe Region (depth: 2)
-/// │   ├── Germany Office (depth: 3)
-/// │   └── France Office (depth: 3)
-/// └── Asia Region (depth: 2)
-///     └── Japan Office (depth: 3)
-/// </example>
 public static class TreePrinter
 {
-    public static void Print(AccountTreeDto node, string prefix = "", bool isLast = true)
+    /// <summary>
+    /// Recursively prints the account tree with tabulation according to depth.
+    /// </summary>
+    /// <param name="node">The current account node.</param>
+    /// <param name="prefix">The prefix string for the current line (indentation + bars).</param>
+    /// <param name="isLast">True if this is the last child of its parent.</param>
+    /// <param name="isRoot">True if this is the starting point of the print.</param>
+    public static void Print(AccountTreeDto node, string prefix = "", bool isLast = true, bool isRoot = true)
     {
         // Determine the connector character based on whether this is the last sibling
-        var connector = prefix == "" ? "" : (isLast ? "└── " : "├── ");
+        var connector = isRoot ? "" : (isLast ? "└── " : "├── ");
 
-        System.Console.WriteLine($"{prefix}{connector}{node.Name} (depth: {node.Depth}) [id: {node.Id}]");
+        // Save original color for restoration
+        var originalColor = Console.ForegroundColor;
 
-        // Calculate prefix for child nodes
-        var childPrefix = prefix + (prefix == "" ? "" : (isLast ? "    " : "│   "));
+        // 1. Print indentation and connector
+        Console.Write(prefix);
+        Console.Write(connector);
+
+        // 2. Print Account Name with highlight
+        Console.ForegroundColor = isRoot ? ConsoleColor.Yellow : ConsoleColor.Cyan;
+        Console.Write(node.Name);
+
+        // 3. Print Metadata in a subtle color
+        Console.ForegroundColor = ConsoleColor.DarkGray;
+        Console.WriteLine($" (depth: {node.Depth}) [id: {node.Id}]");
+
+        // Restore color
+        Console.ForegroundColor = originalColor;
+
+        // 4. Calculate prefix for child nodes using tabs for "tabulation according to depth"
+        // If a tab is 4 or 8 spaces, this ensures clear hierarchy.
+        var childPrefix = prefix + (isRoot ? "\t" : (isLast ? "\t" : "│\t"));
 
         for (int i = 0; i < node.Children.Count; i++)
         {
             var isLastChild = i == node.Children.Count - 1;
-            Print(node.Children[i], childPrefix, isLastChild);
+            Print(node.Children[i], childPrefix, isLastChild, false);
         }
     }
 }
+

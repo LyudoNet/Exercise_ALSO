@@ -1,0 +1,24 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="SeedRoot.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\HierarchyAccounts.Infrastructure\HierarchyAccounts.Infrastructure.csproj" />
+    <ProjectReference Include="..\HierarchyAccounts.Domain\HierarchyAccounts.Domain.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.11" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="8.0.11" />
+
+  </ItemGroup>
+</Project>
