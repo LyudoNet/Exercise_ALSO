@@ -19,7 +19,7 @@ public class AccountServiceTests
         _service = new AccountService(_repoMock.Object);
     }
 
-    // ── CreateAsync ───────────────────────────────────────────────────────────
+
 
     [Fact]
     public async Task CreateAsync_WithNoParent_ShouldCreateRootAccount()
@@ -78,7 +78,7 @@ public class AccountServiceTests
             .Should().ThrowAsync<KeyNotFoundException>();
     }
 
-    // ── MoveAsync ─────────────────────────────────────────────────────────────
+
 
     [Fact]
     public async Task MoveAsync_WhenAccountIsRoot_ShouldThrow_RootAccountException()
@@ -164,7 +164,7 @@ public class AccountServiceTests
         _repoMock.Verify(r => r.SaveChangesAsync(default), Times.Once);
     }
 
-    // ── DeleteAsync ───────────────────────────────────────────────────────────
+
 
     [Fact]
     public async Task DeleteAsync_WhenAccountIsRoot_ShouldThrow_RootAccountException()

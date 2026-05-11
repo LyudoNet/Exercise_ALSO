@@ -5,7 +5,7 @@ using HierarchyAccounts.Domain.Entities;
 
 public class AccountTests
 {
-    // ── CreateRoot ────────────────────────────────────────────────────────────
+
 
     [Fact]
     public void CreateRoot_ShouldHaveDepthOne()
@@ -35,7 +35,7 @@ public class AccountTests
         account.Name.Should().Be("Global Corp");
     }
 
-    // ── CreateChild ───────────────────────────────────────────────────────────
+
 
     [Fact]
     public void CreateChild_ShouldHaveDepthOfParentPlusOne()
@@ -62,7 +62,7 @@ public class AccountTests
         child1.Id.Should().NotBe(child2.Id);
     }
 
-    // ── IsRoot ────────────────────────────────────────────────────────────────
+
 
     [Fact]
     public void IsRoot_ShouldReturnTrue_WhenAccountHasNoParent()
@@ -79,7 +79,7 @@ public class AccountTests
         child.IsRoot().Should().BeFalse();
     }
 
-    // ── SetParent ─────────────────────────────────────────────────────────────
+
 
     [Fact]
     public void SetParent_ShouldUpdateParentIdAndDepth()
