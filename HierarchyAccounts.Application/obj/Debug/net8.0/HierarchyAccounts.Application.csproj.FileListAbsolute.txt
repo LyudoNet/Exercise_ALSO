@@ -1,0 +1,16 @@
+C:\Users\lyudm\source\Exercise_ALSO\HierarchyAccounts.Application\bin\Debug\net8.0\HierarchyAccounts.Application.deps.json
+C:\Users\lyudm\source\Exercise_ALSO\HierarchyAccounts.Application\bin\Debug\net8.0\HierarchyAccounts.Application.dll
+C:\Users\lyudm\source\Exercise_ALSO\HierarchyAccounts.Application\bin\Debug\net8.0\HierarchyAccounts.Application.pdb
+C:\Users\lyudm\source\Exercise_ALSO\HierarchyAccounts.Application\bin\Debug\net8.0\HierarchyAccounts.Domain.dll
+C:\Users\lyudm\source\Exercise_ALSO\HierarchyAccounts.Application\bin\Debug\net8.0\HierarchyAccounts.Domain.pdb
+C:\Users\lyudm\source\Exercise_ALSO\HierarchyAccounts.Application\obj\Debug\net8.0\HierarchyAccounts.Application.csproj.AssemblyReference.cache
+C:\Users\lyudm\source\Exercise_ALSO\HierarchyAccounts.Application\obj\Debug\net8.0\HierarchyAccounts.Application.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\lyudm\source\Exercise_ALSO\HierarchyAccounts.Application\obj\Debug\net8.0\HierarchyAccounts.Application.AssemblyInfoInputs.cache
+C:\Users\lyudm\source\Exercise_ALSO\HierarchyAccounts.Application\obj\Debug\net8.0\HierarchyAccounts.Application.AssemblyInfo.cs
+C:\Users\lyudm\source\Exercise_ALSO\HierarchyAccounts.Application\obj\Debug\net8.0\HierarchyAccounts.Application.csproj.CoreCompileInputs.cache
+C:\Users\lyudm\source\Exercise_ALSO\HierarchyAccounts.Application\obj\Debug\net8.0\HierarchyAccounts.Application.sourcelink.json
+C:\Users\lyudm\source\Exercise_ALSO\HierarchyAccounts.Application\obj\Debug\net8.0\Hierarch.1846D3ED.Up2Date
+C:\Users\lyudm\source\Exercise_ALSO\HierarchyAccounts.Application\obj\Debug\net8.0\HierarchyAccounts.Application.dll
+C:\Users\lyudm\source\Exercise_ALSO\HierarchyAccounts.Application\obj\Debug\net8.0\refint\HierarchyAccounts.Application.dll
+C:\Users\lyudm\source\Exercise_ALSO\HierarchyAccounts.Application\obj\Debug\net8.0\HierarchyAccounts.Application.pdb
+C:\Users\lyudm\source\Exercise_ALSO\HierarchyAccounts.Application\obj\Debug\net8.0\ref\HierarchyAccounts.Application.dll
