@@ -105,7 +105,7 @@ public class AccountService : IAccountService
             throw new RootAccountException("The root account cannot be deleted.");
 
         // Reassign children to the deleted account's parent
-        foreach (var child in account.Children)
+        foreach (var child in account.Children.ToList())
         {
             child.SetParent(account.ParentId, account.Depth);
             await _repository.UpdateAsync(child, ct);

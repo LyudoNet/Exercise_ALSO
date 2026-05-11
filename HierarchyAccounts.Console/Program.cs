@@ -38,7 +38,7 @@ try
     if (tree is null)
     {
         Console.Error.WriteLine("No data returned from the API.");
-        Environment.Exit(1);
+        return;
     }
 
     Console.WriteLine();
@@ -54,5 +54,9 @@ catch (HttpRequestException ex)
 {
     Console.Error.WriteLine($"[ERROR] Could not reach the API at {apiUrl}");
     Console.Error.WriteLine($"        {ex.Message}");
-    Environment.Exit(1);
+}
+finally
+{
+    Console.WriteLine("\nPress any key to exit...");
+    Console.ReadKey();
 }
