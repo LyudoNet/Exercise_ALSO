@@ -1,9 +1,6 @@
 namespace HierarchyAccounts.Domain.Entities;
 
-/// <summary>
-/// Represents a single node in the account hierarchy tree.
-/// An account can be a global account, regional branch, country office, or local reseller.
-/// </summary>
+/// <summary> Node in the account hierarchy tree. </summary>
 public class Account
 {
     public const int MaxDepth = 5;
@@ -12,9 +9,7 @@ public class Account
     public string Name { get; private set; } = string.Empty;
     public Guid? ParentId { get; private set; }
 
-    /// <summary>
-    /// Depth of this account in the tree. Root = 1, maximum = 5.
-    /// </summary>
+    /// <summary> Depth (Root = 1, Max = 5). </summary>
     public int Depth { get; private set; }
 
     public DateTime CreatedAt { get; private set; }
@@ -26,9 +21,7 @@ public class Account
     // Required by EF Core — do not use directly
     private Account() { }
 
-    /// <summary>
-    /// Creates a root account with no parent (depth = 1).
-    /// </summary>
+    /// <summary> Creates a root account (depth = 1). </summary>
     public static Account CreateRoot(string name)
     {
         return new Account
@@ -41,10 +34,7 @@ public class Account
         };
     }
 
-    /// <summary>
-    /// Creates a child account under the specified parent.
-    /// Depth is automatically set to parent.Depth + 1.
-    /// </summary>
+    /// <summary> Creates a child account (Depth = parent.Depth + 1). </summary>
     public static Account CreateChild(string name, Account parent)
     {
         return new Account
@@ -57,25 +47,17 @@ public class Account
         };
     }
 
-    /// <summary>
-    /// Returns true if this account has no parent (i.e. is the root of the tree).
-    /// </summary>
+    /// <summary> Returns true if this is the root. </summary>
     public bool IsRoot() => ParentId == null;
 
-    /// <summary>
-    /// Updates the ParentId and Depth of this account.
-    /// Called during a move operation before saving.
-    /// </summary>
+    /// <summary> Updates ParentId and Depth. </summary>
     public void SetParent(Guid? parentId, int newDepth)
     {
         ParentId = parentId;
         Depth = newDepth;
     }
 
-    /// <summary>
-    /// Recursively updates the depth of this account and all its loaded descendants.
-    /// Must be called after a move to keep the entire subtree consistent.
-    /// </summary>
+    /// <summary> Recursively updates subtree depth. </summary>
     public void UpdateDepth(int newDepth)
     {
         Depth = newDepth;

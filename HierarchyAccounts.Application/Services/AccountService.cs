@@ -15,9 +15,7 @@ public class AccountService : IAccountService
         _repository = repository;
     }
 
-    /// <summary>
-    /// Creates a new account.
-    /// </summary>
+    /// <summary> Creates a new account. </summary>
     public async Task<AccountDto> CreateAsync(CreateAccountRequest request, CancellationToken ct = default)
     {
         Account account;
@@ -43,9 +41,7 @@ public class AccountService : IAccountService
         return MapToDto(account);
     }
 
-    /// <summary>
-    /// Moves an account to a new parent.
-    /// </summary>
+    /// <summary> Moves an account to a new parent. </summary>
     public async Task MoveAsync(Guid accountId, Guid newParentId, CancellationToken ct = default)
     {
         var account = await _repository.GetByIdAsync(accountId, ct)
@@ -83,7 +79,7 @@ public class AccountService : IAccountService
         account.SetParent(newParentId, newDepth);
         await _repository.UpdateAsync(account, ct);
 
-        // Update depth for every descendant to keep the subtree consistent
+        // Update subtree depth consistency
         foreach (var descendant in descendants)
         {
             descendant.SetParent(descendant.ParentId, descendant.Depth + depthDelta);
@@ -93,9 +89,7 @@ public class AccountService : IAccountService
         await _repository.SaveChangesAsync(ct);
     }
 
-    /// <summary>
-    /// Deletes an account and reassigns its children to its parent.
-    /// </summary>
+    /// <summary> Deletes an account and reparents children. </summary>
     public async Task DeleteAsync(Guid accountId, CancellationToken ct = default)
     {
         var account = await _repository.GetByIdWithChildrenAsync(accountId, ct)
@@ -104,7 +98,7 @@ public class AccountService : IAccountService
         if (account.IsRoot())
             throw new RootAccountException("The root account cannot be deleted.");
 
-        // Reassign children to the deleted account's parent
+        // Reparent children to parent of deleted account
         foreach (var child in account.Children.ToList())
         {
             child.SetParent(account.ParentId, account.Depth);
@@ -131,7 +125,7 @@ public class AccountService : IAccountService
         return MapToTreeDto(root);
     }
 
-    // Loads all accounts, finds the root, and builds the tree in memory.
+    // Builds the account tree in memory.
     public async Task<AccountTreeDto> GetFullTreeAsync(CancellationToken ct = default)
     {
         var allAccounts = await _repository.GetFullTreeAsync(ct);
@@ -139,7 +133,7 @@ public class AccountService : IAccountService
         var root = allAccounts.FirstOrDefault(a => a.ParentId == null)
             ?? throw new KeyNotFoundException("No root account found in the system.");
 
-        // Build a lookup of children grouped by ParentId for O(n) tree construction
+        // Group children by ParentId for O(n) construction
         var childrenLookup = allAccounts
             .Where(a => a.ParentId.HasValue)
             .GroupBy(a => a.ParentId!.Value)
@@ -157,7 +151,7 @@ public class AccountService : IAccountService
         account.CreatedAt
     );
 
-    // Recursively maps an Account (with loaded Children) to AccountTreeDto
+    // Recursively maps Account to AccountTreeDto
     private static AccountTreeDto MapToTreeDto(Account account) => new(
         account.Id,
         account.Name,
@@ -167,7 +161,7 @@ public class AccountService : IAccountService
         account.Children.Select(MapToTreeDto).ToList()
     );
 
-    // Builds AccountTreeDto from a flat list using a pre-built children lookup (O(n) complexity)
+    // Builds AccountTreeDto from lookup (O(n))
     private static AccountTreeDto BuildTreeDto(Account node, Dictionary<Guid, List<Account>> lookup)
     {
         var children = lookup.TryGetValue(node.Id, out var childList)
