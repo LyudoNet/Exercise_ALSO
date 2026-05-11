@@ -15,13 +15,9 @@ public class AccountService : IAccountService
         _repository = repository;
     }
 
-    // ── CreateAsync ──────────────────────────────────────────────────────────
-    // Logic:
-    // 1. If ParentId is null → create root account via Account.CreateRoot(name)
-    // 2. If ParentId is provided → fetch parent (throw KeyNotFoundException if missing)
-    // 3. Validate: parent.Depth + 1 > Account.MaxDepth → throw MaxDepthExceededException
-    // 4. Create child: Account.CreateChild(name, parent)
-    // 5. Persist and return AccountDto
+    /// <summary>
+    /// Creates a new account.
+    /// </summary>
     public async Task<AccountDto> CreateAsync(CreateAccountRequest request, CancellationToken ct = default)
     {
         Account account;
@@ -47,21 +43,9 @@ public class AccountService : IAccountService
         return MapToDto(account);
     }
 
-    // ── MoveAsync ────────────────────────────────────────────────────────────
-    // Logic:
-    // 1. Fetch the account to move (throw KeyNotFoundException if missing)
-    // 2. If account.IsRoot() → throw RootAccountException
-    // 3. Fetch newParent (throw KeyNotFoundException if missing)
-    // 4. If newParent.Id == account.Id → throw CycleDetectedException (self-reference)
-    // 5. Fetch all descendants of account (flat list)
-    // 6. If descendants contain newParent.Id → throw CycleDetectedException
-    // 7. Calculate new depth: newParent.Depth + 1
-    // 8. Calculate depth delta: newDepth - account.Depth
-    // 9. Find maximum depth among all descendants
-    // 10. If (maxDescendantDepth + depthDelta) > Account.MaxDepth → throw MaxDepthExceededException
-    // 11. Update account: account.SetParent(newParentId, newDepth)
-    // 12. Update each descendant depth by depthDelta
-    // 13. Persist all changes via a single SaveChangesAsync
+    /// <summary>
+    /// Moves an account to a new parent.
+    /// </summary>
     public async Task MoveAsync(Guid accountId, Guid newParentId, CancellationToken ct = default)
     {
         var account = await _repository.GetByIdAsync(accountId, ct)
@@ -109,15 +93,9 @@ public class AccountService : IAccountService
         await _repository.SaveChangesAsync(ct);
     }
 
-    // ── DeleteAsync ──────────────────────────────────────────────────────────
-    // Logic:
-    // 1. Fetch account with its direct children loaded (throw KeyNotFoundException if missing)
-    // 2. If account.IsRoot() → throw RootAccountException (root deletion is forbidden)
-    // 3. For each child: reassign child's parent to account.ParentId at account.Depth
-    //    (children move up one level to the deleted account's parent)
-    // 4. Update each child in the repository
-    // 5. Delete the account
-    // 6. SaveChangesAsync (single transaction)
+    /// <summary>
+    /// Deletes an account and reassigns its children to its parent.
+    /// </summary>
     public async Task DeleteAsync(Guid accountId, CancellationToken ct = default)
     {
         var account = await _repository.GetByIdWithChildrenAsync(accountId, ct)
@@ -137,7 +115,6 @@ public class AccountService : IAccountService
         await _repository.SaveChangesAsync(ct);
     }
 
-    // ── GetByIdAsync ─────────────────────────────────────────────────────────
     public async Task<AccountDto> GetByIdAsync(Guid id, CancellationToken ct = default)
     {
         var account = await _repository.GetByIdAsync(id, ct)
@@ -146,7 +123,6 @@ public class AccountService : IAccountService
         return MapToDto(account);
     }
 
-    // ── GetSubtreeAsync ───────────────────────────────────────────────────────
     public async Task<AccountTreeDto> GetSubtreeAsync(Guid id, CancellationToken ct = default)
     {
         var root = await _repository.GetSubtreeAsync(id, ct)
@@ -155,7 +131,6 @@ public class AccountService : IAccountService
         return MapToTreeDto(root);
     }
 
-    // ── GetFullTreeAsync ──────────────────────────────────────────────────────
     // Loads all accounts, finds the root, and builds the tree in memory.
     public async Task<AccountTreeDto> GetFullTreeAsync(CancellationToken ct = default)
     {
@@ -173,7 +148,6 @@ public class AccountService : IAccountService
         return BuildTreeDto(root, childrenLookup);
     }
 
-    // ── Private helpers ───────────────────────────────────────────────────────
 
     private static AccountDto MapToDto(Account account) => new(
         account.Id,
